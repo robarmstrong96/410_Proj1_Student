@@ -70,7 +70,7 @@ int main() {
 	}
 	else
 		cout<<"Success 8"<<endl;
-			
+
 	//sort the data
 	sortData(START_TIME);
 
@@ -82,9 +82,8 @@ int main() {
 	}
 	else
 		cout<<"Success 9"<<endl;
-	
+
 
 	cout<<"TOTAL POINTS FOR STUDENT = "<<std::to_string(total_points)<<endl;
 	return iRet;
 }
-
