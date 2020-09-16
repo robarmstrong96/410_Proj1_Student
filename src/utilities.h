@@ -16,7 +16,6 @@
 const int 			SUCCESS			 				=  0;
 const int 			FAIL							=  SUCCESS - 1;
 const int 			COULD_NOT_OPEN_FILE				=  SUCCESS - 3;
-const int 			COULD_NOT_READ_FILE				=  SUCCESS - 4;
 const int			UNINITIALIZED					=  SUCCESS - 5;
 const char			CHAR_TO_SEARCH_FOR				=',';
 
