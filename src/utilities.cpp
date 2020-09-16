@@ -55,10 +55,14 @@ int loadData(const char* filename, bool ignoreFirstRow) {
 			stringstream stream(file_line);
 			string current;
 			vector<string> chars;
-			while (getline(stream, current, CHAR_TO_SEARCH_FOR)) { // Reads all characters in current line, seperated by given delimiter.
+
+			// Reads all characters in current line, seperated by given delimiter.
+			while (getline(stream, current, CHAR_TO_SEARCH_FOR)) {
 				chars.push_back(current);
 			}
-			if (chars.size() == 4 && (count(chars.begin(), chars.end(), " ") < 1) && (count(chars.begin(), chars.end(), "") < 1)) { // Checks if vector has the correct amount of characters and none of these characters are a ' ' or ''
+
+			// Checks if vector has the correct amount of characters and none of these characters are a ' ' or ''
+			if (chars.size() == 4 && (count(chars.begin(), chars.end(), " ") < 1) && (count(chars.begin(), chars.end(), "") < 1)) {
 				process_stats temp_struct;
 
 				// adds values read into 'chars' vector to corressponding struct variable.
@@ -81,7 +85,7 @@ void sortData(SORT_ORDER mySortOrder) {
 	sort(data.begin(), data.end(), sorter);
 }
 
-// Custom sorter class which sorts based on
+// Custom sorter class which sorts based on user specified sort enum from enum SORT_ORDER
 bool sorter (process_stats a, process_stats b) {
 	if (sort_setting == CPU_TIME) {
 		if (a.cpu_time < b.cpu_time) { return true; }
