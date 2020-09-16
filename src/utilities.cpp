@@ -21,7 +21,8 @@ vector<process_stats> data;
 
 bool sorter(process_stats, process_stats);
 
-static SORT_ORDER sort_setting;
+// contains static sort order
+SORT_ORDER sort_setting;
 
 //if myString does not contain a string rep of number returns o
 //if int not large enough has undefined behaviour, very fragile
@@ -36,33 +37,37 @@ int loadData(const char* filename, bool ignoreFirstRow) {
 	//opening file/basic file i/o
 	ifstream file;
 	file.open(filename);
-	if (!file.is_open()) {
+	if (!file.is_open()) { // If the current directory is not src/file is not in main project directory, append src/ to filename.
 		string temp_file_name;
 		temp_file_name += "src/"; temp_file_name += filename;
 		file.open(temp_file_name);
-		if (!file.is_open()) { return COULD_NOT_OPEN_FILE; }
+		if (!file.is_open()) { return COULD_NOT_OPEN_FILE; } // Checks if file in src/<filename> was opened.
 	}
 
 	// reading and adding to vector
 	string file_line;
 	bool first_line_encounter = false;
 	while(getline(file, file_line)) {
-		if (ignoreFirstRow && !first_line_encounter) {
+		if (ignoreFirstRow && !first_line_encounter) { // Checks if skipping first line in opened file
 			first_line_encounter = true;
 		}
-		else {
+		else { // Reads from file
 			stringstream stream(file_line);
 			string current;
 			vector<string> chars;
-			while (getline(stream, current, CHAR_TO_SEARCH_FOR)) {
+			while (getline(stream, current, CHAR_TO_SEARCH_FOR)) { // Reads all characters in current line, seperated by given delimiter.
 				chars.push_back(current);
 			}
-			if (chars.size() == 4 && (count(chars.begin(), chars.end(), " ") < 1) && (count(chars.begin(), chars.end(), "") < 1)) {
+			if (chars.size() == 4 && (count(chars.begin(), chars.end(), " ") < 1) && (count(chars.begin(), chars.end(), "") < 1)) { // Checks if vector has the correct amount of characters and none of these characters are a ' ' or ''
 				process_stats temp_struct;
+
+				// adds values read into 'chars' vector to corressponding struct variable.
 				temp_struct.process_number = stringToInt(chars[0].c_str());
 				temp_struct.start_time = stringToInt(chars[1].c_str());
 				temp_struct.cpu_time = stringToInt(chars[2].c_str());
 				temp_struct.io_time = stringToInt(chars[3].c_str());
+
+				// adds struct to 'data' vector
 				data.push_back(temp_struct);
 				}
 			}
@@ -70,12 +75,13 @@ int loadData(const char* filename, bool ignoreFirstRow) {
 		return SUCCESS;
 	}
 
-//will sort according to user preference
+// Will sort according to user preference
 void sortData(SORT_ORDER mySortOrder) {
 	sort_setting = mySortOrder;
 	sort(data.begin(), data.end(), sorter);
 }
 
+// Custom sorter class which sorts based on
 bool sorter (process_stats a, process_stats b) {
 	if (sort_setting == CPU_TIME) {
 		if (a.cpu_time < b.cpu_time) { return true; }
@@ -96,7 +102,6 @@ bool sorter (process_stats a, process_stats b) {
 }
 
 process_stats getNext() {
-	for (int i = 0; i < data.size(); i++) { cout << to_string(data[i].process_number) << " + " << to_string(data[i].start_time) << endl;}
 	process_stats myFirst;
 	myFirst = data.front(); // Assigns first struct entry to myFirst struct.
 	data.erase(data.begin()); // Deletes the first entry from the vector.
@@ -105,6 +110,5 @@ process_stats getNext() {
 
 //returns number of process_stats structs in the vector holding them
 int getNumbRows(){
-	cout << data.size() << endl;
 	return data.size(); // Size of vector = # of rows. Each vector element is a single struct entry, representing a single row.
 }
